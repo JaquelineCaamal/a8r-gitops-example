@@ -1,0 +1,5 @@
+k8s_config:
+- manifest_path: /manifests
+  cluster_info:
+    cluster_id: 4565a845-cdad-57d1-96cd-cdbaee410bc7
+    cluster_name: Jaqueline staging
