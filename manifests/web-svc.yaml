@@ -1,0 +1,51 @@
+---
+apiVersion: getambassador.io/v3alpha1
+kind: Mapping
+metadata:
+  name: web-svc-backend
+  namespace: default
+spec:
+  hostname: "*"
+  prefix: /backend/
+  service: web-svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: web-svc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-svc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-svc
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: web-svc
+    spec:
+      containers:
+      - name: backend
+        image: quay.io/datawire/web-svc:0.3.0
+        ports:
+        - name: http
+          containerPort: 8080
+        resources:
+          limits:
+            cpu: "0.1"
+            memory: 100Mi
